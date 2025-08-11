@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <!-- Pick ONE of the JDBC URLs below and driver -->
+    <!-- MySQL: -->
+    <!--property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/library_db?useSSL=false&amp;serverTimezone=UTC</property-->
+    <!-- SQL Server: -->
+    <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+    <property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;databaseName=library_db</property>
+
+    <property name="hibernate.connection.username">sa</property>
+    <property name="hibernate.connection.password">123</property>
+
+    <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+    <!-- For MySQL use: org.hibernate.dialect.MySQL8Dialect -->
+
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.format_sql">true</property>
+
+    <!-- Entities -->
+    <mapping class="com.libsys.domain.Author"/>
+    <mapping class="com.libsys.domain.Book"/>
+    <mapping class="com.libsys.domain.Member"/>
+    <mapping class="com.libsys.domain.Borrowing"/>
+  </session-factory>
+</hibernate-configuration>
