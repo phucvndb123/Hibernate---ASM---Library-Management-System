@@ -24,16 +24,26 @@ public class LibraryService {
         if (!book.isAvailable()) throw new IllegalStateException("Book is not available");
         if (borrows.countActiveBorrowingsByMember(memberId) >= 5)
             throw new IllegalStateException("Member has reached borrowing limit");
+
+        LocalDate borrowDate = LocalDate.now();
+        if (days <= 0)
+            throw new IllegalArgumentException("Due date must be after borrow date");
+        LocalDate dueDate = borrowDate.plusDays(days);
+
         book.setAvailable(false);
         book.setBorrowCount(book.getBorrowCount() + 1);
         books.save(book);
-        Borrowing br = new Borrowing(m.get(), book, LocalDate.now().plusDays(days));
+        Borrowing br = new Borrowing(m.get(), book, dueDate);
         br.setStatus(BorrowStatus.BORROWED);
         return borrows.save(br);
 
     }
     public Borrowing returnBook(Long borrowingId) {
-        Borrowing br = borrows.findById(borrowingId).orElseThrow();
+        Borrowing br = borrows.findById(borrowingId)
+                .orElseThrow(() -> new IllegalArgumentException("Borrowing not found"));
+        if (br.getStatus() != BorrowStatus.BORROWED) {
+            throw new IllegalStateException("Borrowing already returned");
+        }
         br.setReturnedOn(LocalDate.now());
         br.getBook().setAvailable(true);
         br.setStatus(BorrowStatus.RETURNED);
