@@ -27,6 +27,13 @@ public class Borrowing {
     @Column(name = "fine_amount")
     private Double fineAmount = 0.0;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private BorrowStatus status = BorrowStatus.BORROWED;
+
+    @Version
+    private long version;
+
     public Borrowing() {
     }
 
@@ -82,5 +89,16 @@ public class Borrowing {
 
     public void setFineAmount(Double fineAmount) {
         this.fineAmount = fineAmount;
+    }
+    public BorrowStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BorrowStatus status) {
+        this.status = status;
+    }
+
+    public long getVersion() {
+        return version;
     }
 }

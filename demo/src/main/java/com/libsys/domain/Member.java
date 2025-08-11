@@ -28,6 +28,9 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Borrowing> borrowings = new HashSet<>();
 
+    @Version
+    private long version;
+
     public Member() {
     }
 
@@ -50,6 +53,9 @@ public class Member {
 
     public String getEmail() {
         return email;
+    }
+    public long getVersion() {
+        return version;
     }
 
     public void setEmail(String email) {

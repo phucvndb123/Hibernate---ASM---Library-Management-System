@@ -1,6 +1,7 @@
 package com.libsys.service;
 
 import com.libsys.domain.Book;
+import com.libsys.domain.BorrowStatus;
 import com.libsys.domain.Borrowing;
 import com.libsys.domain.Member;
 import com.libsys.repo.BookRepository;
@@ -21,18 +22,28 @@ public class LibraryService {
         if (b.isEmpty() || m.isEmpty()) throw new IllegalArgumentException("Invalid member/book");
         Book book = b.get();
         if (!book.isAvailable()) throw new IllegalStateException("Book is not available");
+        if (borrows.countActiveBorrowingsByMember(memberId) >= 5)
+            throw new IllegalStateException("Member has reached borrowing limit");
         book.setAvailable(false);
         book.setBorrowCount(book.getBorrowCount() + 1);
         books.save(book);
         Borrowing br = new Borrowing(m.get(), book, LocalDate.now().plusDays(days));
+        br.setStatus(BorrowStatus.BORROWED);
         return borrows.save(br);
-    }
 
+    }
     public Borrowing returnBook(Long borrowingId) {
         Borrowing br = borrows.findById(borrowingId).orElseThrow();
         br.setReturnedOn(LocalDate.now());
         br.getBook().setAvailable(true);
+        br.setStatus(BorrowStatus.RETURNED);
         books.save(br.getBook());
         return borrows.save(br);
+    }
+    public void deleteBook(Long bookId) {
+        if (borrows.hasActiveBorrowingsForBook(bookId))
+            throw new IllegalStateException("Cannot delete book with active borrowings");
+        Book book = books.findById(bookId).orElseThrow();
+        books.delete(book);
     }
 }

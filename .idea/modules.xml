@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Hibernate---ASM---Library-Management-System.iml" filepath="$PROJECT_DIR$/.idea/Hibernate---ASM---Library-Management-System.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo/library.iml" filepath="$PROJECT_DIR$/demo/library.iml" />
     </modules>
   </component>
 </project>

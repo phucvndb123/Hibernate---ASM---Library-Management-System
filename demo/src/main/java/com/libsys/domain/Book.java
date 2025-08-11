@@ -31,6 +31,9 @@ public class Book {
     @Column(name = "borrow_count", nullable = false)
     private int borrowCount = 0;
 
+    @Version
+    private long version;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "book_author",
@@ -98,6 +101,11 @@ public class Book {
     public Set<Author> getAuthors() {
         return authors;
     }
+
+    public long getVersion() {
+        return version;
+    }
+
 
     @Override
     public boolean equals(Object o) {
